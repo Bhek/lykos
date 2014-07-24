@@ -1,0 +1,18 @@
+# Backup files
+*~
+\#*#
+.*.s[a-w][a-p]
+.s[a-w][a-p]
+
+# Python compiled files
+__pycache__/
+*.py[co]
+
+# Config files
+botconfig.py
+
+# Database files
+*.sqlite3
+
+# Log files
+errors.log
