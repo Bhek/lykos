@@ -867,23 +867,25 @@ def stop_game(cli, winner = ""):
     
     var.LOGGER.saveToFile()
     
-    for plr, rol in plrl:
+#    for plr, rol in plrl:
         #if plr not in var.USERS.keys():  # they died TODO: when a player leaves, count the game as lost for them
         #    if plr in var.DEAD_USERS.keys():
         #        acc = var.DEAD_USERS[plr]["account"]
         #    else:
         #        continue  # something wrong happened
         #else:
-        if plr.startswith("(dced)") and plr[6:] in var.DCED_PLAYERS.keys():
-            acc = var.DCED_PLAYERS[plr[6:]]["account"]
-        elif plr in var.PLAYERS.keys():
-            acc = var.PLAYERS[plr]["account"]
-        else:
-            continue  #probably fjoin'd fake
+#        if plr.startswith("(dced)") and plr[6:] in var.DCED_PLAYERS.keys():
+#            acc = var.DCED_PLAYERS[plr[6:]]["account"]
+#        elif plr in var.PLAYERS.keys():
+#            acc = var.PLAYERS[plr]["account"]
+#        else:
+#            continue  #probably fjoin'd fake
 
-        if acc == "*":
-            continue  # not logged in during game start
+#        if acc == "*":
+#            continue  # not logged in during game start
         # determine if this player's team won
+
+    for i, (plr, rol) in enumerate(plrl):
         if plr in (var.ORIGINAL_ROLES["wolf"] + var.ORIGINAL_ROLES["traitor"] +
                    var.ORIGINAL_ROLES["werecrow"]):  # the player was wolf-aligned
             if winner == "wolves":
@@ -902,7 +904,7 @@ def stop_game(cli, winner = ""):
                 
         iwon = won and plr in var.list_players()  # survived, team won = individual win
                 
-        var.update_role_stats(acc, rol, won, iwon)
+        var.update_role_stats(plr, rol, won, iwon)
     
     size = len(var.list_players()) + len(var.DEAD)
     if winner != "": # Only update if not an abnormal game stop
