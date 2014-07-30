@@ -3203,17 +3203,19 @@ def player_stats(cli, nick, chan, rest):
     
     # List the player's total games for all roles if no role is given
     if len(params) < 2:
-        if chan == nick:
-            pm(cli, nick, var.get_player_totals(acc))
-        else:
-            cli.msg(chan, var.get_player_totals(acc))
+        pm(cli, nick, var.get_player_totals(acc))
+        #if chan == nick:
+        #    pm(cli, nick, var.get_player_totals(acc))
+        #else:
+        #    cli.msg(chan, var.get_player_totals(acc))
     else:
         role = " ".join(params[1:])  
+        pm(cli, nick, var.get_player_stats(acc, role))
         # Attempt to find the player's stats.
-        if chan == nick:
-            pm(cli, nick, var.get_player_stats(acc, role))
-        else:
-            cli.msg(chan, var.get_player_stats(acc, role))
+        #if chan == nick:
+        #    pm(cli, nick, var.get_player_stats(acc, role))
+        #else:
+        #    cli.msg(chan, var.get_player_stats(acc, role))
     
 @pmcmd("playerstats", "pstats", "player", "p")
 def player_stats_pm(cli, nick, rest):
