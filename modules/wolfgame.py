@@ -48,6 +48,7 @@ var.LAST_PSTATS = None
 var.LAST_TIME = None
 
 var.USERS = {}
+var.NEXT_ALERTS = {}
 
 var.PINGING = False
 var.ADMIN_PINGING = False
@@ -3245,7 +3246,15 @@ def fsend(cli, nick, rest):
     print('{0} - {1} fsend - {2}'.format(time.strftime('%Y-%m-%dT%H:%M:%S%z'), nick, rest))
     cli.send(rest)
 
-    
+@pmcmd("next", "n", admin_only=False)
+def next(cli, nick, rest):
+    if var.PHASE in ("none", "join"):
+        cli.notice(nick, "No game is currently running.")
+        return
+    else:
+        var.USERS[nick] = 1
+        pm(cli, nick, "You will be alerted when the current game is over.")
+
 before_debug_mode_commands = list(COMMANDS.keys())
 before_debug_mode_pmcommands = list(PM_COMMANDS.keys())
 
