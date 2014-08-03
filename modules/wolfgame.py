@@ -183,6 +183,7 @@ def reset_modes_timers(cli):
     mass_mode(cli, cmodes)
 
 def reset(cli):
+    alert_next(cli)
     var.PHASE = "none"
     
     var.GAME_ID = 0
@@ -197,8 +198,13 @@ def reset(cli):
 
     dict.clear(var.LAST_SAID_TIME)
     dict.clear(var.PLAYERS)
+    dict.clear(var.NEXT_ALERTS)
     dict.clear(var.DCED_PLAYERS)
     dict.clear(var.DISCONNECTED)
+
+def alert_next(cli):
+    for nick in var.NEXT_ALERTS.keys():
+        pm(cli, nick, "The game of werewolf has ended you may join the next game now.")
 
 def make_stasis(nick, penalty):
     try:
