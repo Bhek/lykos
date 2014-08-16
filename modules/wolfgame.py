@@ -3258,7 +3258,7 @@ def next(cli, nick, rest):
         cli.notice(nick, "No game is currently running.")
         return
     else:
-        var.USERS[nick] = 1
+        var.NEXT_ALERTS[nick] = 1
         pm(cli, nick, "You will be alerted when the current game is over.")
 
 before_debug_mode_commands = list(COMMANDS.keys())
