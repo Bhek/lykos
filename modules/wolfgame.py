@@ -48,6 +48,7 @@ var.LAST_PSTATS = None
 var.LAST_TIME = None
 
 var.USERS = {}
+var.NEXT_ALERTS = {}
 
 var.PINGING = False
 var.ADMIN_PINGING = False
@@ -182,6 +183,7 @@ def reset_modes_timers(cli):
     mass_mode(cli, cmodes)
 
 def reset(cli):
+    alert_next(cli)
     var.PHASE = "none"
     
     var.GAME_ID = 0
@@ -196,8 +198,13 @@ def reset(cli):
 
     dict.clear(var.LAST_SAID_TIME)
     dict.clear(var.PLAYERS)
+    dict.clear(var.NEXT_ALERTS)
     dict.clear(var.DCED_PLAYERS)
     dict.clear(var.DISCONNECTED)
+
+def alert_next(cli):
+    for nick in var.NEXT_ALERTS.keys():
+        pm(cli, nick, "The game of werewolf has ended you may join the next game now.")
 
 def make_stasis(nick, penalty):
     try:
@@ -3245,7 +3252,15 @@ def fsend(cli, nick, rest):
     print('{0} - {1} fsend - {2}'.format(time.strftime('%Y-%m-%dT%H:%M:%S%z'), nick, rest))
     cli.send(rest)
 
-    
+@pmcmd("next", "n", admin_only=False)
+def next(cli, nick, rest):
+    if var.PHASE in ("none", "join"):
+        cli.notice(nick, "No game is currently running.")
+        return
+    else:
+        var.NEXT_ALERTS[nick] = 1
+        pm(cli, nick, "You will be alerted when the current game is over.")
+
 before_debug_mode_commands = list(COMMANDS.keys())
 before_debug_mode_pmcommands = list(PM_COMMANDS.keys())
 
