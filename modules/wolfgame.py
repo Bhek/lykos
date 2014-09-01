@@ -2641,9 +2641,9 @@ def start(cli, nick, chann_, rest):
             del var.STASISED[cloak]
 
     # DEATH TO IDLERS!
-    reapertimer = threading.Thread(None, reaper, args=(cli,var.GAME_ID))
-    reapertimer.daemon = True
-    reapertimer.start()
+    #reapertimer = threading.Thread(None, reaper, args=(cli,var.GAME_ID))
+    #reapertimer.daemon = True
+    #reapertimer.start()
 
     
     
