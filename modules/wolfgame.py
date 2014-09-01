@@ -868,6 +868,9 @@ def stop_game(cli, winner = ""):
     cli.msg(chan, " ".join(roles_msg))
 
     reset_modes_timers(cli)
+
+    for nick in var.PLAYING:
+        var.PLAYING.remove(nick)
     
     # Set temporary phase to deal with disk lag
     var.PHASE = "writing files"
