@@ -488,6 +488,8 @@ def kill_join(cli, chan):
                   'has been canceled. If you are still active, ' +
                   'please join again to start a new game.')
     var.LOGGER.logMessage('Game canceled.')
+    for nick in var.PLAYING:
+        var.PLAYING.remove(nick)
     
 
 @cmd("fjoin", admin_only=True)
