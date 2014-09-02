@@ -1576,7 +1576,7 @@ def transition_day(cli, gameid=0):
         var.GUNNERS[victim] = 0  # just in case
 
     cmodes = []
-    playing = list(var.PLAYERS.keys()) - var.DEAD
+    playing = [x for x in list(var.PLAYERS.keys()) if x not in var.DEAD]
     for nick in playing:
         cmodes.append(("+v", nick))
     mass_mode(cli, cmodes)
@@ -2399,7 +2399,7 @@ def transition_night(cli):
     cli.msg(chan, dmsg)
 
     cmodes = []
-    playing = list(var.PLAYERS.keys()) - var.DEAD
+    playing = [x for x in list(var.PLAYERS.keys()) if x not in var.DEAD]
     for nick in playing:
         cmodes.append(("-v", nick))
     mass_mode(cli, cmodes)
