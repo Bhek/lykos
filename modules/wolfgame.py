@@ -1078,7 +1078,7 @@ def reaper(cli, gameid):
             # Terminate reaper when experiencing disk lag
             if var.PHASE == "writing files":
                 return
-            if var.WARN_IDLE_TIME or var.KILL_IDLE_TIME:  # only if enabled
+            if var.PHASE != "night" and (var.WARN_IDLE_TIME or var.KILL_IDLE_TIME):  # only if enabled
                 to_warn = []
                 to_kill = []
                 for nick in var.list_players():
@@ -2648,9 +2648,9 @@ def start(cli, nick, chann_, rest):
             del var.STASISED[cloak]
 
     # DEATH TO IDLERS!
-    #reapertimer = threading.Thread(None, reaper, args=(cli,var.GAME_ID))
-    #reapertimer.daemon = True
-    #reapertimer.start()
+    reapertimer = threading.Thread(None, reaper, args=(cli,var.GAME_ID))
+    reapertimer.daemon = True
+    reapertimer.start()
 
     
     
