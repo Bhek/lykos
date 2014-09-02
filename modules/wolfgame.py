@@ -949,6 +949,8 @@ def chk_win(cli, end_game = True):
         #cli.msg(chan, "No more players remaining. Game ended.")
         reset_modes_timers(cli)
         reset(cli)
+        for nick in var.PLAYING:
+            var.PLAYING.remove(nick)
         return True
         
     if var.PHASE == "join":
@@ -1373,7 +1375,7 @@ def leave_game(cli, nick, chan, rest):
     var.LOGGER.logMessage(("{0}, a {1}, has died of an unknown disease.").format(nick, var.get_reveal_role(nick)))
     if var.PHASE != "join":
         make_stasis(nick, var.LEAVE_STASIS_PENALTY)
-
+    var.PLAYING.remove(nick)
     del_player(cli, nick)
     
 
