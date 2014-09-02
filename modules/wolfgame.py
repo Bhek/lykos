@@ -1362,6 +1362,7 @@ def leave_game(cli, nick, chan, rest):
 
         if lpl == 0:
             population = (" No more players remaining.")
+            reset(cli)
         else:
             population = (" New player count: \u0002{0}\u0002").format(lpl)
     else:
