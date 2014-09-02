@@ -50,8 +50,6 @@ var.LAST_TIME = None
 var.USERS = {}
 var.NEXT_ALERTS = {}
 
-var.PLAYING = []
-
 var.PINGING = False
 var.ADMIN_PINGING = False
 var.ROLES = {"person" : []}
@@ -435,8 +433,7 @@ def join(cli, nick, chann_, rest):
         cli.msg(chan, ('\u0002{0}\u0002 has started a game of Werewolf. '+
                       'Type "{1}join" to join. Type "{1}start" to start the game. '+
                       'Type "{1}wait" to increase start wait time.').format(nick, botconfig.CMD_CHAR))
-        
-        var.PLAYING.append(nick)
+
         # Set join timer
         if var.JOIN_TIME_LIMIT:
             t = threading.Timer(var.JOIN_TIME_LIMIT, kill_join, [cli, chan])
@@ -455,7 +452,6 @@ def join(cli, nick, chann_, rest):
         cli.mode(chan, "+v", nick)
         var.ROLES["person"].append(nick)
         cli.msg(chan, '\u0002{0}\u0002 has joined the game and raised the number of players to \u0002{1}\u0002.'.format(nick, len(pl) + 1))
-        var.PLAYING.append(nick)
         if not cloak in var.JOINED_THIS_GAME:
             # make sure this only happens once
             var.JOINED_THIS_GAME.append(cloak)
@@ -488,9 +484,8 @@ def kill_join(cli, chan):
                   'has been canceled. If you are still active, ' +
                   'please join again to start a new game.')
     var.LOGGER.logMessage('Game canceled.')
-    for nick in var.PLAYING:
-        var.PLAYING.remove(nick)
-    
+    reset(cli)
+
 
 @cmd("fjoin", admin_only=True)
 @pmcmd("fjoin", admin_only=False)
@@ -745,7 +740,6 @@ def chk_decision(cli):
         if len(voters) >= votesneeded:
             lmsg = random.choice(var.LYNCH_MESSAGES).format(votee, var.get_reveal_role(votee))
             cli.msg(botconfig.CHANNEL, lmsg)
-            var.PLAYING.remove(votee)
             var.LOGGER.logMessage(lmsg.replace("\02", ""))
             var.LOGGER.logBare(votee, "LYNCHED")
             if del_player(cli, votee, True):
@@ -871,9 +865,6 @@ def stop_game(cli, winner = ""):
 
     reset_modes_timers(cli)
 
-    for nick in var.PLAYING:
-        var.PLAYING.remove(nick)
-    
     # Set temporary phase to deal with disk lag
     var.PHASE = "writing files"
     
@@ -1515,7 +1506,6 @@ def transition_day(cli, gameid=0):
                         "\u0002{1}\u0002, is found. Those remaining mourn the "+
                         "tragedy.").format(victim, var.get_role(victim)))
         dead.append(victim)
-        var.PLAYING.remove(victim)
         var.LOGGER.logBare(victim, "KILLED")
         if random.random() < 1/50:
             message.append(random.choice(
@@ -1539,7 +1529,6 @@ def transition_day(cli, gameid=0):
                             "\02{1}\02, a \02{2}\02, was shot dead.").format(victim, deadwolf, var.get_role(deadwolf)))
             var.LOGGER.logBare(deadwolf, "KILLEDBYGUNNER")
             dead.append(deadwolf)
-            var.PLAYING.remove(deadwolf)
     if victim in var.HVISITED.values():  #  victim was visited by some harlot
         for hlt in var.HVISITED.keys():
             if var.HVISITED[hlt] == victim:
@@ -1547,14 +1536,12 @@ def transition_day(cli, gameid=0):
                                 "visiting the victim's house last night and is "+
                                 "now dead.").format(hlt))
                 dead.append(hlt)
-                var.PLAYING.remove(hlt)
     for harlot in var.ROLES["harlot"]:
         if var.HVISITED.get(harlot) in var.ROLES["wolf"]+var.ROLES["werecrow"]:
             message.append(("\02{0}\02, a \02harlot\02, made the unfortunate mistake of "+
                             "visiting a wolf's house last night and is "+
                             "now dead.").format(harlot))
             dead.append(harlot)
-            var.PLAYING.remove(harlot)
     for gangel in var.ROLES["guardian angel"]:
         if var.GUARDED.get(gangel) in var.ROLES["wolf"]+var.ROLES["werecrow"]:
             if victim == gangel:
@@ -1566,7 +1553,6 @@ def transition_day(cli, gameid=0):
                                 "last night, and is now dead.").format(gangel))
                 var.LOGGER.logBare(gangel, "KILLEDWHENGUARDINGWOLF")
                 dead.append(gangel)
-                var.PLAYING.remove(gangel)
     cli.msg(chan, "\n".join(message))
     for msg in message:
         var.LOGGER.logMessage(msg.replace("\02", ""))
@@ -1593,7 +1579,8 @@ def transition_day(cli, gameid=0):
         var.GUNNERS[victim] = 0  # just in case
 
     cmodes = []
-    for nick in var.PLAYING:
+    playing = var.PLAYERS - var.DEAD
+    for nick in playing:
         cmodes.append(("+v", nick))
     mass_mode(cli, cmodes)
 
@@ -2415,7 +2402,8 @@ def transition_night(cli):
     cli.msg(chan, dmsg)
 
     cmodes = []
-    for nick in var.PLAYING:
+    playing = var.PLAYERS - var.DEAD
+    for nick in playing:
         cmodes.append(("-v", nick))
     mass_mode(cli, cmodes)
 
