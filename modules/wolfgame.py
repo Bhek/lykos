@@ -1105,6 +1105,7 @@ def reaper(cli, gameid):
                                    "time and has been found dead. The survivors bury "+
                                    "the \u0002{1}\u0002's body.").format(nck, var.get_reveal_role(nck)))
                     #make_stasis(nck, var.IDLE_STASIS_PENALTY)
+                    var.PLAYING.remove(nck)
                     if not del_player(cli, nck):
                         return
                 pl = var.list_players()
