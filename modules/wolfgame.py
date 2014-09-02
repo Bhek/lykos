@@ -1364,7 +1364,6 @@ def leave_game(cli, nick, chan, rest):
     var.LOGGER.logMessage(("{0}, a {1}, has died of an unknown disease.").format(nick, var.get_reveal_role(nick)))
     if var.PHASE != "join":
         make_stasis(nick, var.LEAVE_STASIS_PENALTY)
-
     del_player(cli, nick)
 
 
@@ -1577,7 +1576,7 @@ def transition_day(cli, gameid=0):
         var.GUNNERS[victim] = 0  # just in case
 
     cmodes = []
-    playing = var.PLAYERS - var.DEAD
+    playing = list(var.PLAYERS.keys()) - var.DEAD
     for nick in playing:
         cmodes.append(("+v", nick))
     mass_mode(cli, cmodes)
@@ -2400,7 +2399,7 @@ def transition_night(cli):
     cli.msg(chan, dmsg)
 
     cmodes = []
-    playing = var.PLAYERS - var.DEAD
+    playing = list(var.PLAYERS.keys()) - var.DEAD
     for nick in playing:
         cmodes.append(("-v", nick))
     mass_mode(cli, cmodes)
