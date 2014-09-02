@@ -27,8 +27,8 @@ JOIN_TIME_LIMIT = 1800
 SHORT_DAY_PLAYERS = 6 # Number of players left to have a short day
 SHORT_DAY_LIMIT_WARN = 300
 SHORT_DAY_LIMIT_CHANGE = 60
-KILL_IDLE_TIME = 300
-WARN_IDLE_TIME = 180
+KILL_IDLE_TIME = 360
+WARN_IDLE_TIME = 240
 PART_GRACE_TIME = 30
 QUIT_GRACE_TIME = 30
 #  controls how many people it does in one /msg; only works for messages that are the same
