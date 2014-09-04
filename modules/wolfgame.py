@@ -183,6 +183,8 @@ def reset_modes_timers(cli):
     for deadguy in var.DEAD:
         cmodes.append(("-q", deadguy+"!*@*"))
     mass_mode(cli, cmodes)
+    for nick in var.PLAYING:
+        var.PLAYING.remove(nick)
 
 def reset(cli):
     alert_next(cli)
