@@ -1822,6 +1822,7 @@ def shoot(cli, nick, chann_, rest):
         if victimrole in ("wolf", "werecrow"):
             cli.msg(chan, ("\u0002{0}\u0002 is a {1}, and is dying from "+
                            "the silver bullet.").format(victim, victimrole))
+            var.PLAYING.remove(victim)
             var.LOGGER.logMessage(("{0} is a {1}, and is dying from the "+
                             "silver bullet.").format(victim, victimrole))
             if not del_player(cli, victim):
@@ -1859,6 +1860,7 @@ def shoot(cli, nick, chann_, rest):
     else:
         cli.msg(chan, ("Oh no! \u0002{0}\u0002's gun was poorly maintained and has exploded! "+
                        "The village mourns a gunner-\u0002{1}\u0002.").format(nick, var.get_reveal_role(nick)))
+        var.PLAYING.remove(nick)
         var.LOGGER.logMessage(("Oh no! {0}'s gun was poorly maintained and has exploded! "+
                        "The village mourns a gunner-{1}.").format(nick, var.get_reveal_role(nick)))
         if not del_player(cli, nick):
