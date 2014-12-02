@@ -1831,7 +1831,7 @@ def shoot(cli, nick, chann_, rest):
             cli.msg(chan, ("\u0002{0}\u0002 is a not a wolf "+
                            "but was accidentally fatally injured.").format(victim))
             cli.msg(chan, "The village has sacrificed a \u0002{0}\u0002.".format(victimrole))
-            var.PLAYING.remove(victimrole)
+            var.PLAYING.remove(victim)
             var.LOGGER.logMessage("{0} is not a wolf but was accidentally fatally injured.".format(victim))
             var.LOGGER.logMessage("The village has sacrificed a {0}.".format(victimrole))
             if not del_player(cli, victim):
